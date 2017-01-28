@@ -1,2 +1,40 @@
-# Unit-3-Exercise-1
-In the first exercise of the third unit, I'm learning how to clean up basic data by using plyr and dplyr on a data set of 25 rows
+# Unit 3 Exercise 1:
+## Learning how to use plyr and dplyr to clean up basic data sets.
+### Tidying up the data from the refine set out of Springboard.
+library(plyr)
+library(dplyr)
+
+### Clean up the 'company' column
+philip_index <- grep("^[pPf]", refine_original$company)
+refine_original$company[philip_index] <- "philips"
+akzo_index <- grep("^[aA]", refine_original$company)
+refine_original$company[akzo_index] <- "akzo"
+vanhouten_index <- grep("^[vV]", refine_original$company)
+refine_original$company[vanhouten_index] <- "van houten"
+unilever_index <- grep("^[uU]", refine_original$company)
+refine_original$company[unilever_index] <- "unilever"
+refine_next <- refine_original
+refine_next %>% 
+  arrange(company) %>% 
+  print(refine_next)
+
+### Separate the product code and product number
+refine_next <- refine_next %>% 
+  separate(`Product code / number`, sep = "-", into = c("product_code", "product_number")) %>% 
+  arrange(company) %>% 
+  print(refine_next)
+
+### Add product categories corresponding to the product code
+#### Assigning the names to a vector
+products <- c(p = "Smartphone", v = "TV", x = "Laptop", q = "Tablet")
+#### Mutating the product category column to the current definition of the data frame
+refine_next <- refine_next %>% 
+  mutate(product_category = products[product_code]) %>% 
+  arrange(company) %>% 
+  print(refine_next)
+
+### Add the full address from the address, city, and country
+refine_next <- refine_next %>% 
+  unite(address, city, country, col = "full_address", sep = ", ") %>% 
+  arrange(company) %>% 
+  print(refine_next)
