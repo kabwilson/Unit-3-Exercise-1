@@ -32,3 +32,9 @@ refine_next <- refine_next %>%
   unite(address, city, country, col = "full_address", sep = ", ") %>% 
   arrange(company) %>% 
   print(refine_next)
+
+### Create dummy variables for company and product category and add them to the data frame
+company_dummy <- data.frame(model.matrix(~ company, data = refine_next))
+product_dummy <- data.frame(model.matrix(~ product_category, data = refine_next))
+bind_cols(refine_next, company_dummy, product_dummy)
+#### This is not complete yet. I need to remove the x-intercept from both of the model.matrix() outputs and rename the columns
