@@ -28,7 +28,7 @@ unilever_index <- grep("^[uU]", refine_next$company)
 refine_next$company[unilever_index] <- "unilever"
 
 ### Separate the product code and product number
-refine_next <- refine_next %>% 
+refine_again <- refine_next %>% 
 
   separate(`Product code / number`, sep = "-", into = c("product_code", "product_number"))
 
@@ -36,12 +36,12 @@ refine_next <- refine_next %>%
 #### Assigning the names to a vector
 products <- c(p = "Smartphone", v = "TV", x = "Laptop", q = "Tablet")
 #### Mutating the product category column to the current definition of the data frame
-refine_next <- refine_next %>% 
+refine_again <- refine_again %>% 
 
   mutate(product_category = products[product_code])
 
 ### Add the full address from the address, city, and country
-refine_next <- refine_next %>% 
+refine_again <- refine_again %>% 
 
   unite(address, city, country, col = "full_address", sep = ", ")
 
@@ -50,13 +50,12 @@ company_dummy <- data.frame(model.matrix(~ company + 0, data = refine_again))
 
 product_dummy <- data.frame(model.matrix(~ product + 0, data = refine_again))
 
-company_names <- c(company_akzo, company_philips, company_van_houten, company_unilever_
+names(company_dummy) <- c("company_akzo", "company_philips", "company_unilever", "company_van_houten")
 
-product_names <- c(product_smartphone, product_tablet, product_laptop, product_tv)
+names(product_dummy) <- c("product_laptop", "product_smartphone", "product_tablet", "product_tv")
 
-#### Just need to apply those column names to the dummy variables
 refine_clean <- bind_cols(refine_again, company_dummy, product_dummy) %>%
   
-  arrange(columns) %>%
+  arrange(company) %>%
   
   print(refine_clean)
