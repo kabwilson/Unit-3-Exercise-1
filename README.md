@@ -52,10 +52,10 @@ product_dummy <- data.frame(model.matrix(~ product + 0, data = refine_again))
 
 names(company_dummy) <- c("company_akzo", "company_philips", "company_unilever", "company_van_houten")
 
-names(product_dummy) <- c("product_laptop", "product_smartphone", "product_tablet", "product_tv")
+names(product_dummy) <- c("product_smartphone", "product_tablet", "product_tv", "product_laptop")
 
-refine_clean <- bind_cols(refine_again, company_dummy, product_dummy) %>%
-  
-  arrange(company) %>%
-  
-  print(refine_clean)
+refine_clean <- bind_cols(refine_again, company_dummy, product_dummy)
+
+refine_clean <- refine_clean %>% arrange(company)
+
+print(refine_clean)
